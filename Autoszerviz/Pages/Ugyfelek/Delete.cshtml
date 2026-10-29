@@ -8,7 +8,16 @@
 <h1>Ügyfél törlése</h1>
 <hr />
 
-<div class="alert alert-warning">Biztosan törölni szeretnéd ezt az ügyfelet?</div>
+@if (Model.JavitasokSzama > 0)
+{
+    <div class="alert alert-danger">
+        Ez az ügyfél nem törölhető, mert @Model.JavitasokSzama javítás tartozik hozzá.
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">Biztosan törölni szeretnéd ezt az ügyfelet?</div>
+}
 
 <dl class="row">
     <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Ugyfel.Nev)</dt>
@@ -23,6 +32,9 @@
 
 <form method="post">
     <input type="hidden" asp-for="Ugyfel.Id" />
-    <button type="submit" class="btn btn-danger">Törlés</button>
-    <a asp-page="./Index" class="btn btn-secondary">Mégse</a>
+    @if (Model.JavitasokSzama == 0)
+    {
+        <button type="submit" class="btn btn-danger">Törlés</button>
+    }
+    <a asp-page="./Index" class="btn btn-secondary">Vissza</a>
 </form>

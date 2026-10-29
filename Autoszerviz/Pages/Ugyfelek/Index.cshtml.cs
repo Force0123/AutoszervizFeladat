@@ -19,6 +19,7 @@ namespace Autoszerviz.Pages.Ugyfelek
         public async Task OnGetAsync()
         {
             Ugyfelek = await _context.Ugyfelek
+                .Include(u => u.Javitasok)
                 .OrderBy(u => u.Nev)
                 .ToListAsync();
         }

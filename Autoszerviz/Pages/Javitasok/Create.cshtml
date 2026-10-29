@@ -1,0 +1,49 @@
+@page
+@model Autoszerviz.Pages.Javitasok.CreateModel
+
+@{
+    ViewData["Title"] = "Új javítás";
+}
+
+<h1>Új javítás</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-5">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Javitas.UgyfelId" class="form-label"></label> <span class="text-danger">*</span>
+                <select asp-for="Javitas.UgyfelId" asp-items="Model.UgyfelLista" class="form-select">
+                    <option value="">-- Válassz ügyfelet --</option>
+                </select>
+                <span asp-validation-for="Javitas.UgyfelId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Javitas.Rendszam" class="form-label"></label> <span class="text-danger">*</span>
+                <input asp-for="Javitas.Rendszam" class="form-control" placeholder="ABC-123" />
+                <span asp-validation-for="Javitas.Rendszam" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Javitas.Leiras" class="form-label"></label>
+                <textarea asp-for="Javitas.Leiras" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Javitas.Leiras" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Javitas.Koltseg" class="form-label"></label>
+                <input asp-for="Javitas.Koltseg" class="form-control" />
+                <span asp-validation-for="Javitas.Koltseg" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Mentés</button>
+            <a asp-page="./Index" class="btn btn-secondary">Mégse</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

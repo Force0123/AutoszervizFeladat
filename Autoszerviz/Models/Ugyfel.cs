@@ -18,5 +18,7 @@ namespace Autoszerviz.Models
         [EmailAddress(ErrorMessage = "Hibás e-mail cím formátum.")]
         [Display(Name = "E-mail")]
         public string? Email { get; set; }
+
+        public ICollection<Javitas> Javitasok { get; set; } = new List<Javitas>();
     }
 }

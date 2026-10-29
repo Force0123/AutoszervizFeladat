@@ -1,0 +1,34 @@
+@page
+@model Autoszerviz.Pages.Javitasok.DetailsModel
+
+@{
+    ViewData["Title"] = "Javítás adatai";
+}
+
+<h1>Javítás: @Model.Javitas.Rendszam</h1>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Javitas.Ugyfel)</dt>
+    <dd class="col-sm-9">@Model.Javitas.Ugyfel?.Nev</dd>
+
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Javitas.Rendszam)</dt>
+    <dd class="col-sm-9">@Model.Javitas.Rendszam</dd>
+
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Javitas.Leiras)</dt>
+    <dd class="col-sm-9">@(Model.Javitas.Leiras ?? "-")</dd>
+
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Javitas.Koltseg)</dt>
+    <dd class="col-sm-9">@(Model.Javitas.Koltseg == null ? "Még nincs megadva" : Model.Javitas.Koltseg.Value.ToString("N0") + " Ft")</dd>
+
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Javitas.Allapot)</dt>
+    <dd class="col-sm-9">@Model.Javitas.Allapot</dd>
+
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Javitas.FelvetelDatuma)</dt>
+    <dd class="col-sm-9">@Model.Javitas.FelvetelDatuma.ToString("yyyy.MM.dd HH:mm")</dd>
+</dl>
+
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Javitas.Id" class="btn btn-primary">Szerkesztés</a>
+    <a asp-page="./Index" class="btn btn-secondary">Vissza a listához</a>
+</div>

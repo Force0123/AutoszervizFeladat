@@ -1,0 +1,68 @@
+@page
+@model Autoszerviz.Pages.Javitasok.IndexModel
+
+@{
+    ViewData["Title"] = "Javítások";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Javítások</h1>
+    <a asp-page="Create" class="btn btn-primary">+ Új javítás</a>
+</div>
+
+@if (TempData["Uzenet"] is string uzenet)
+{
+    <div class="alert alert-success">@uzenet</div>
+}
+
+@if (Model.Javitasok.Count == 0)
+{
+    <p class="text-muted">Még nincs rögzített javítás.</p>
+}
+else
+{
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Javitasok[0].FelvetelDatuma)</th>
+                <th>@Html.DisplayNameFor(model => model.Javitasok[0].Ugyfel)</th>
+                <th>@Html.DisplayNameFor(model => model.Javitasok[0].Rendszam)</th>
+                <th>@Html.DisplayNameFor(model => model.Javitasok[0].Leiras)</th>
+                <th>@Html.DisplayNameFor(model => model.Javitasok[0].Koltseg)</th>
+                <th>@Html.DisplayNameFor(model => model.Javitasok[0].Allapot)</th>
+                <th class="text-end">Műveletek</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Javitasok)
+            {
+                <tr>
+                    <td>@item.FelvetelDatuma.ToString("yyyy.MM.dd")</td>
+                    <td>@item.Ugyfel?.Nev</td>
+                    <td><strong>@item.Rendszam</strong></td>
+                    <td>@(item.Leiras ?? "-")</td>
+                    <td>@(item.Koltseg == null ? "-" : item.Koltseg.Value.ToString("N0") + " Ft")</td>
+                    <td>
+                        @if (item.Allapot == "Kész")
+                        {
+                            <span class="badge bg-success">@item.Allapot</span>
+                        }
+                        else if (item.Allapot == "Folyamatban")
+                        {
+                            <span class="badge bg-warning text-dark">@item.Allapot</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">@item.Allapot</span>
+                        }
+                    </td>
+                    <td class="text-end text-nowrap">
+                        <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Részletek</a>
+                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Szerkesztés</a>
+                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Törlés</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

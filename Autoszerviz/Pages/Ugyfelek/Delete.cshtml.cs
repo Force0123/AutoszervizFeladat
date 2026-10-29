@@ -18,6 +18,8 @@ namespace Autoszerviz.Pages.Ugyfelek
         [BindProperty]
         public Ugyfel Ugyfel { get; set; } = default!;
 
+        public int JavitasokSzama { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -32,6 +34,7 @@ namespace Autoszerviz.Pages.Ugyfelek
             }
 
             Ugyfel = ugyfel;
+            JavitasokSzama = await _context.Javitasok.CountAsync(j => j.UgyfelId == id);
             return Page();
         }
 
@@ -43,12 +46,21 @@ namespace Autoszerviz.Pages.Ugyfelek
             }
 
             var ugyfel = await _context.Ugyfelek.FindAsync(id);
-            if (ugyfel != null)
+            if (ugyfel == null)
             {
-                _context.Ugyfelek.Remove(ugyfel);
-                await _context.SaveChangesAsync();
-                TempData["Uzenet"] = $"{ugyfel.Nev} törölve.";
+                return RedirectToPage("./Index");
             }
+
+            bool vanJavitasa = await _context.Javitasok.AnyAsync(j => j.UgyfelId == id);
+            if (vanJavitasa)
+            {
+                TempData["Hiba"] = $"{ugyfel.Nev} nem törölhető, mert van hozzá tartozó javítás.";
+                return RedirectToPage("./Index");
+            }
+
+            _context.Ugyfelek.Remove(ugyfel);
+            await _context.SaveChangesAsync();
+            TempData["Uzenet"] = $"{ugyfel.Nev} törölve.";
 
             return RedirectToPage("./Index");
         }
