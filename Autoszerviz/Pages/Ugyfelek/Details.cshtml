@@ -16,7 +16,46 @@
     <dd class="col-sm-10">@(Model.Ugyfel.Email ?? "-")</dd>
 </dl>
 
-<div>
+<h4 class="mt-4">Javítások (@Model.Javitasok.Count db)</h4>
+
+@if (Model.Javitasok.Count == 0)
+{
+    <p class="text-muted">Ennek az ügyfélnek még nincs javítása.</p>
+}
+else
+{
+    <table class="table table-sm table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Felvétel dátuma</th>
+                <th>Rendszám</th>
+                <th>Leírás</th>
+                <th>Állapot</th>
+                <th class="text-end">Költség</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Javitasok)
+            {
+                <tr>
+                    <td>@item.FelvetelDatuma.ToString("yyyy.MM.dd")</td>
+                    <td><strong>@item.Rendszam</strong></td>
+                    <td>@(item.Leiras ?? "-")</td>
+                    <td>@item.Allapot</td>
+                    <td class="text-end">@(item.Koltseg == null ? "-" : item.Koltseg.Value.ToString("N0") + " Ft")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="table-primary">
+                <th colspan="4">Összköltség</th>
+                <th class="text-end">@Model.Osszkoltseg.ToString("N0") Ft</th>
+            </tr>
+        </tfoot>
+    </table>
+}
+
+<div class="mt-3">
     <a asp-page="./Edit" asp-route-id="@Model.Ugyfel.Id" class="btn btn-primary">Szerkesztés</a>
     <a asp-page="./Index" class="btn btn-secondary">Vissza a listához</a>
 </div>

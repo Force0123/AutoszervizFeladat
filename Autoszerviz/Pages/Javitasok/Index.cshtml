@@ -15,9 +15,31 @@
     <div class="alert alert-success">@uzenet</div>
 }
 
+@if (TempData["Hiba"] is string hiba)
+{
+    <div class="alert alert-danger">@hiba</div>
+}
+
+<form method="get" class="row g-2 align-items-center mb-3">
+    <div class="col-auto">
+        <label asp-for="AllapotSzuro" class="col-form-label">Állapot:</label>
+    </div>
+    <div class="col-auto">
+        <select asp-for="AllapotSzuro" class="form-select">
+            <option value="">Összes</option>
+            <option value="Felvéve">Felvéve</option>
+            <option value="Folyamatban">Folyamatban</option>
+            <option value="Kész">Kész</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary">Szűrés</button>
+    </div>
+</form>
+
 @if (Model.Javitasok.Count == 0)
 {
-    <p class="text-muted">Még nincs rögzített javítás.</p>
+    <p class="text-muted">Nincs a feltételnek megfelelő javítás.</p>
 }
 else
 {
@@ -38,7 +60,7 @@ else
             {
                 <tr>
                     <td>@item.FelvetelDatuma.ToString("yyyy.MM.dd")</td>
-                    <td>@item.Ugyfel?.Nev</td>
+                    <td><a asp-page="/Ugyfelek/Details" asp-route-id="@item.UgyfelId">@item.Ugyfel?.Nev</a></td>
                     <td><strong>@item.Rendszam</strong></td>
                     <td>@(item.Leiras ?? "-")</td>
                     <td>@(item.Koltseg == null ? "-" : item.Koltseg.Value.ToString("N0") + " Ft")</td>
@@ -57,6 +79,15 @@ else
                         }
                     </td>
                     <td class="text-end text-nowrap">
+                        @if (item.Allapot != "Kész")
+                        {
+                            <form method="post" asp-page-handler="Leptet" asp-route-id="@item.Id" class="d-inline">
+                                <input type="hidden" name="AllapotSzuro" value="@Model.AllapotSzuro" />
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    @(item.Allapot == "Felvéve" ? "Folyamatban →" : "Kész →")
+                                </button>
+                            </form>
+                        }
                         <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Részletek</a>
                         <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Szerkesztés</a>
                         <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Törlés</a>

@@ -17,6 +17,10 @@ namespace Autoszerviz.Pages.Ugyfelek
 
         public Ugyfel Ugyfel { get; set; } = default!;
 
+        public List<Javitas> Javitasok { get; set; } = new List<Javitas>();
+
+        public decimal Osszkoltseg { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -24,13 +28,27 @@ namespace Autoszerviz.Pages.Ugyfelek
                 return NotFound();
             }
 
-            var ugyfel = await _context.Ugyfelek.FirstOrDefaultAsync(u => u.Id == id);
+            var ugyfel = await _context.Ugyfelek
+                .Include(u => u.Javitasok)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
             if (ugyfel == null)
             {
                 return NotFound();
             }
 
             Ugyfel = ugyfel;
+            Javitasok = ugyfel.Javitasok.OrderByDescending(j => j.FelvetelDatuma).ToList();
+
+            Osszkoltseg = 0;
+            foreach (var javitas in Javitasok)
+            {
+                if (javitas.Koltseg != null)
+                {
+                    Osszkoltseg += javitas.Koltseg.Value;
+                }
+            }
+
             return Page();
         }
     }

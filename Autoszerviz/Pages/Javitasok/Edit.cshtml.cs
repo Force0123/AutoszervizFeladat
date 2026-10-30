@@ -61,6 +61,13 @@ namespace Autoszerviz.Pages.Javitasok
                 return NotFound();
             }
 
+            if (javitas.Allapot == "Kész" && (Javitas.Koltseg == null || Javitas.Koltseg <= 0))
+            {
+                ModelState.AddModelError("Javitas.Koltseg", "Kész javításnál a költséget nem lehet törölni.");
+                await UgyfelekBetoltese();
+                return Page();
+            }
+
             javitas.UgyfelId = Javitas.UgyfelId!.Value;
             javitas.Rendszam = Javitas.Rendszam;
             javitas.Leiras = Javitas.Leiras;
